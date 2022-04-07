@@ -1,0 +1,15 @@
+{
+	"name": "api_moviles",
+	"version": "1.0.0",
+	"description": "API para proyecto final del curso de Desarrollo Movil UAO",
+	"main": "index.js",
+	"scripts": {
+		"start": "node app.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Brayan Andres Hinestroza <brayan.hinestroza00@gmail.com>",
+	"license": "MIT",
+	"dependencies": {
+		"express": "^4.17.3"
+	}
+}
