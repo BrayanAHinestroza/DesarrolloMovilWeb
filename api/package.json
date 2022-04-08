@@ -5,11 +5,19 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node app.js",
+		"dev": "nodemon app.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Brayan Andres Hinestroza <brayan.hinestroza00@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"express": "^4.17.3"
+		"bcrypt": "^5.0.1",
+		"cors": "^2.8.5",
+		"express": "^4.17.3",
+		"jsonwebtoken": "^8.5.1",
+		"mysql": "^2.18.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.15"
 	}
 }
