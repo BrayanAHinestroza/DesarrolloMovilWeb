@@ -22,14 +22,14 @@ autenticacion.InicioSesionApp = async (req, res) => {
           .send({ message: "La contraseña es incorrecta", code: 2 });
       } else {
         const token = jwt.sign({ id_usuario, roles_id }, config.SECRET);
-        res.status(200).send({ roles_id, token });
+        res.status(200).send({ roles_id, token, code: 1 });
       }
     });
     //Si no encuentra el usuario
   } else {
     res
       .status(200)
-      .send({ message: "El usuario no se encuentra registrado", code: 1 });
+      .send({ message: "El usuario no se encuentra registrado", code: 3 });
   }
 };
 
