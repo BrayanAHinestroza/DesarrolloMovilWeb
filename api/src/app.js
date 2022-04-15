@@ -21,5 +21,6 @@ app.use(express.json());
 //Routes
 app.use('/', require('./routes/auth.routes'));
 app.use('/profesor', require('./routes/profesor.routes'));
+app.use('/clases', require('./routes/clases.routes'));
 
 module.exports = app;
