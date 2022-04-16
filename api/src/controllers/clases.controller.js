@@ -8,7 +8,7 @@ clases.getEstudiantes = async (req, res) => {
     const { id_curso } = req.body;
 
     try {
-        const resultado = await ClasesModels.getEstudiantes(id_curso);
+        const resultado = await ClasesModels.getEstudiantes(req.body);
 
         if (resultado.length > 0) {
             return res
