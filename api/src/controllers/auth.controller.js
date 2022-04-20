@@ -8,19 +8,21 @@ const AuthModels = require("../models/auth.model");
 
 autenticacion.InicioSesionApp = async (req, res) => {
   const resultado = await AuthModels.InicioSesionApp(req, res);
-  // console.log(await bcrypt.hash(req.body.password, 10))
 
+  console.log("AQUI ENTRO")
   if (resultado.length > 0) {
     //Encontro un usuario
     const { id_usuario, password, roles_id } = resultado[0];
     const hash = password.toString();
-    bcrypt.compare(req.body.password, hash).then((result) => {
-      console.log(result);
+    bcrypt.compare(req.body.password, hash).then(async (result) => {
       if (!result) {
         res
           .status(200)
           .send({ message: "La contraseña es incorrecta", code: 2 });
       } else {
+
+        await AuthModels.UpdateFirebaseToken(id_usuario, req.body.firebaseToken);
+
         const token = jwt.sign({ id_usuario, roles_id }, config.SECRET);
         res.status(200).send({ roles_id, token, code: 1 });
       }

@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const ProfesorModels = require("../models/profesor.model");
+const ClasesModels = require("../models/clases.model");
 const config = require("../config")
+const admin = require("../firebase")
 
 const profesor = {};
 
@@ -36,11 +38,9 @@ profesor.createNovedadesClase = async (req, res) => {
         const resultado = await ProfesorModels.createNovedadesClase(tipoNovedad, comentariosNovedad, claseNovedad, id_usuario);
 
         if (resultado.affectedRows > 0) {
-            res.status(201).send();
+            notificarUsuarios(tipoNovedad, claseNovedad, res);
         } else {
-            return res
-                .status(400)
-                .send(JSON.stringify(resultado));
+            return res.status(400).send(JSON.stringify(resultado));
         }
     });
 };
@@ -90,5 +90,40 @@ profesor.getClase = async (req, res) => {
     });
 };
 
+
+async function notificarUsuarios(tipoNovedad, id_curso, res) {
+    try {
+        const resultado = await ClasesModels.getEstudiantes({ id_curso });
+
+        if (resultado.length > 0) {
+            //Array of Tokens
+            const registrationTokens = [];
+            resultado.forEach(estudiante => {
+                if (estudiante.firebase_token) {
+                    registrationTokens.push(estudiante.firebase_token);
+                }
+            });
+
+            const message = {
+                notification: {
+                    title: 'Notificacion Nueva',
+                    body: tipoNovedad
+                },
+                tokens: registrationTokens
+            };
+
+            admin.messaging().sendMulticast(message)
+                .then(response => {
+                    console.log("Exito: ", response);
+                }).catch(error => {
+                    console.log("Error: ", error);
+                })
+
+            res.status(201).send()
+        }
+    } catch (error) {
+        console.log({ message: "Error desconocido", error });
+    }
+}
 
 module.exports = profesor;

@@ -18,4 +18,9 @@ Auth.BuscarUsuario = async (cedula) => {
   return await pool.query(query, cedula);
 };
 
+Auth.UpdateFirebaseToken = async (id_usuario, firebase_token) => {
+  const query = "UPDATE usuarios SET firebase_token = ? WHERE id_usuario = ?";
+  return await pool.query(query, [firebase_token, id_usuario]);
+};
+
 module.exports = Auth;
