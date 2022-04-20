@@ -25,6 +25,26 @@ profesor.getNovedadesClase = async (idUsuario) => {
     return await pool.query(query, idUsuario);
 };
 
+profesor.createNovedadesClase = async (tipoNovedad, comentariosNovedad, claseNovedad, id_usuario) => {
+    const pre_query = "(SELECT id_usuario_curso FROM usuarios_cursos WHERE usuarios_id = ? AND cursos_id = ?)";
+
+    const resultado = await pool.query(pre_query, [id_usuario, claseNovedad]);
+
+    if (resultado.length > 0) {
+        const query =
+            `INSERT INTO novedades_cursos
+            (tipo_novedad,
+            observaciones,
+            usuarios_cursos_id)
+        VALUES
+        (?,?,${resultado[0].id_usuario_curso});`;
+
+        return await pool.query(query, [tipoNovedad, comentariosNovedad,]);
+    } else {
+        return { message: "No se encuentro ningún curso asociado" };
+    }
+};
+
 profesor.getClases = async (idUsuario) => {
     const query =
         `SELECT 

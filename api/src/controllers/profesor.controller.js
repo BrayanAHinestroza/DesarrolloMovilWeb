@@ -22,6 +22,29 @@ profesor.getNovedadesClase = async (req, res) => {
     });
 };
 
+profesor.createNovedadesClase = async (req, res) => {
+    const { tipoNovedad, comentariosNovedad, claseNovedad, token } = req.body;
+
+    jwt.verify(token, config.SECRET, async function (err, response) {
+        if (err) {
+            console.log(err)
+            return res.status(500)
+                .send({ message: "Error inesperado", code: err });
+        }
+
+        const { id_usuario } = response;
+        const resultado = await ProfesorModels.createNovedadesClase(tipoNovedad, comentariosNovedad, claseNovedad, id_usuario);
+
+        if (resultado.affectedRows > 0) {
+            res.status(201).send();
+        } else {
+            return res
+                .status(400)
+                .send(JSON.stringify(resultado));
+        }
+    });
+};
+
 profesor.getClases = async (req, res) => {
     const { token } = req.body;
 

@@ -8,6 +8,10 @@ router
     .post(ProfesorController.getNovedadesClase);
 
 router
+    .route("/novedades_clase/add")
+    .post(ProfesorController.createNovedadesClase);
+
+router
     .route("/clases")
     .post(ProfesorController.getClases);
 
