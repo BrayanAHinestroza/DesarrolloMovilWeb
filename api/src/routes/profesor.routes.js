@@ -12,6 +12,14 @@ router
     .post(ProfesorController.createNovedadesClase);
 
 router
+    .route("/novedades_estudiante")
+    .post(ProfesorController.getNovedadesEstudiante);
+
+router
+    .route("/novedades_estudiante/add")
+    .post(ProfesorController.createNovedadesEstudiante);
+
+router
     .route("/clases")
     .post(ProfesorController.getClases);
 

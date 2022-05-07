@@ -4,6 +4,10 @@ const router = Router();
 const ClasesController = require("../controllers/clases.controller");
 
 router
+    .route("/estudiante")
+    .post(ClasesController.getEstudiante);
+
+router
     .route("/estudiantes")
     .post(ClasesController.getEstudiantes);
 

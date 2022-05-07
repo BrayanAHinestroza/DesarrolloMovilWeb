@@ -45,6 +45,45 @@ profesor.createNovedadesClase = async (req, res) => {
     });
 };
 
+profesor.getNovedadesEstudiante = async (req, res) => {
+    const { token } = req.body;
+    jwt.verify(token, config.SECRET, async function (err, response) {
+        if (err) {
+            console.log(err)
+            return res.status(500)
+                .send({ message: "Error inesperado", code: err });
+        }
+
+        const { id_usuario } = response;
+        const resultado = await ProfesorModels.getNovedadesEstudiante(id_usuario);
+
+        return res
+            .status(200)
+            .send(JSON.stringify(resultado));
+    });
+};
+
+profesor.createNovedadesEstudiante = async (req, res) => {
+    const { tipoNovedad, comentariosNovedad, id_estudiante, token } = req.body;
+
+    jwt.verify(token, config.SECRET, async function (err, response) {
+        if (err) {
+            console.log(err)
+            return res.status(500)
+                .send({ message: "Error inesperado", code: err });
+        }
+
+        const { id_usuario } = response;
+        const resultado = await ProfesorModels.createNovedadesEstudiante(tipoNovedad, comentariosNovedad, id_estudiante, id_usuario);
+
+        if (resultado.affectedRows > 0) {
+            return res.status(201).send();
+        } else {
+            return res.status(400).send(JSON.stringify(resultado));
+        }
+    });
+};
+
 profesor.getClases = async (req, res) => {
     const { token } = req.body;
 

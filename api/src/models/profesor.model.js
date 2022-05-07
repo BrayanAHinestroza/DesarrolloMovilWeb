@@ -45,6 +45,21 @@ profesor.createNovedadesClase = async (tipoNovedad, comentariosNovedad, claseNov
     }
 };
 
+profesor.createNovedadesEstudiante = async (tipoNovedad, comentariosNovedad, id_estudiante, id_usuario) => {
+    const query =
+        `INSERT INTO novedades
+            (tipo_novedad,
+            observaciones,
+            estudiantes_id,
+            profesores_id,
+            registrada_por)
+        VALUES
+        (?,?,?,?,'Profesor');`;
+
+    return await pool.query(query, [tipoNovedad, comentariosNovedad, id_estudiante, id_usuario]);
+
+};
+
 profesor.getClases = async (idUsuario) => {
     const query =
         `SELECT 
