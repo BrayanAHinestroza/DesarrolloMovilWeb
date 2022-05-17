@@ -90,4 +90,53 @@ clases.getEstudiantesNovedades = async (req, res) => {
     }
 };
 
+clases.getEventos = async (req, res) => {
+    const { token } = req.body;
+
+    jwt.verify(token, config.SECRET, async function (err, response) {
+        if (err) {
+            console.log(err)
+            return res.status(500)
+                .send({ message: "Error inesperado", code: err });
+        }
+
+        const { id_usuario: id_profesor } = response;
+        try {
+            const resultado = await ClasesModels.getEventos(id_profesor);
+            if (resultado.length > 0) {
+                return res
+                    .status(200)
+                    .send(JSON.stringify(resultado));
+
+            } else {
+                res
+                    .status(200)
+                    .send({ message: "No se encontraron eventos", code: 1 });
+            }
+        } catch (error) {
+            res.status(500).send({ message: "Error desconocido", error });
+        }
+    });
+};
+
+clases.getAsistentesEventos = async (req, res) => {
+    const { id_evento_curso } = req.body;
+
+    try {
+        const resultado = await ClasesModels.getAsistentesEventos(id_evento_curso);
+        if (resultado.length > 0) {
+            return res
+                .status(200)
+                .send(JSON.stringify(resultado));
+
+        } else {
+            res
+                .status(200)
+                .send({ message: "No se encontraron asistentes al evento", code: 1 });
+        }
+    } catch (error) {
+        res.status(500).send({ message: "Error desconocido", error });
+    }
+};
+
 module.exports = clases;

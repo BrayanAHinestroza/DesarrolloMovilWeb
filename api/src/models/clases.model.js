@@ -31,6 +31,24 @@ clases.getEstudiantesNovedades = ({ id_curso, filtro_codigo }) => {
     return pool.query(query, id_curso);
 };
 
+clases.getEventos = (id_profesor) => {
+    const query = `SELECT ec.id_evento_curso, e.nombre 'nombre_evento', e.fecha, e.hora, l.nombre 'nombre_lugar' 
+    FROM eventos_cursos AS ec JOIN eventos AS e ON ec.eventos_id = e.id_evento
+    JOIN lugares AS l ON e.lugares_id = l.id_lugar
+    WHERE ec.estado_evento = "ACTIVO" 
+    AND ec.cursos_id IN (SELECT DISTINCT cursos_id FROM usuarios_cursos WHERE usuarios_profesor_id = ?)`;
+    return pool.query(query, id_profesor);
+};
+
+clases.getAsistentesEventos = (id_evento_curso) => {
+    const query = `SELECT ae.fecha_confirmacion, concat(u.nombre, " ", u.apellido) 'nombre_completo', u.email, p.nombre 'nombre_programa', r.nombre  FROM asistencias_eventos AS ae 
+    JOIN usuarios_cursos AS uc ON ae.usuarios_cursos_id = uc.id_usuario_curso  
+    JOIN usuarios AS u ON uc.usuarios_id = u.id_usuario
+    JOIN programas AS p ON u.programas_id = p.id_programa
+    JOIN roles AS r ON u.roles_id = r.id_rol WHERE ae.eventos_cursos_id = ?`;
+    return pool.query(query, id_evento_curso);
+};
+
 clases.getProfesoresNovedades = ({ id_curso, filtro_codigo }) => {
     const query = `SELECT u.codigo, u.id_usuario, u.nombre, u.apellido, 
     n.id_novedad, n.tipo_novedad, n.observaciones, n.fecha_novedad, 
